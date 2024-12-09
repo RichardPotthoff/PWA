@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My PWA</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- Favicon -->
+    <link rel="icon" href="./icon-16x16.png" sizes="16x16">
+    <link rel="icon" href="./icon-32x32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="./icon-152x152.png" sizes="152x152">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="./manifest.json">
+
+    <!-- Service Worker Registration -->
+    <script>
+		document.addEventListener("DOMContentLoaded", ()=>{
+		  logElement=document.getElementById('log-element')
+		  logElement.innerHTML+="log:<br/>"
+	    });
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('./sw.js').then(function(registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+					logElement.innerHTML+="Service Worker registered with scope: "+registration.scope;
+                }, function(err) {
+                    console.log('Service Worker registration failed:', err);
+					logElement.innerHTML+='Service Worker registration failed:'+JSON.stringify(err);
+                });
+            });
+        
+	     };
+    </script>
+</head>
+<body>
+    <h1>Welcome to My PWA</h1>
+    <!-- Your app content here -->
+	<button id="update-button">Check for Updates</button>
+<script>
+    document.getElementById('update-button').addEventListener('click', function() {
+        // Check if there's an updated service worker available
+        if (navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({ type: 'CHECK_FOR_UPDATE' });
+        }
+    });
+</script>
+	<div id="log-element"></div>
+</body>
+</html>

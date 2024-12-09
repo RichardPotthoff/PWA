@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single File PWA</title>
+
+    <script>
+        function createIcon(width, height, color) {
+            var canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle = color;
+            ctx.fillRect(0, 0, width, height); // Fill with color
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(width / 2, height / 2, width / 4, 0, Math.PI * 2, true);
+            ctx.fill(); // Draw a white circle in the center
+            return canvas.toDataURL('image/png');
+        }
+
+        // When the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+			// Inside your DOMContentLoaded event listener
+			var sizes = [16, 32, 180]; // 180 for iOS devices
+			sizes.forEach(size => {
+			    var icon = createIcon(size, size, '#3498db');
+			    var link = document.createElement('link');
+			    link.rel = 'icon';
+			    // Adding a timestamp to force an update in case of caching issues
+			    link.href = icon + '?v=' + Date.now();
+			    link.sizes = `${size}x${size}`;
+			    link.type = 'image/png';
+			    document.head.appendChild(link);
+			});
+			
+		// Optionally, if you want to show the icon on the page as well
+            var img = document.createElement('img');
+            img.src = createIcon(192, 192, '#3498db'); // Larger size for display on page
+            img.alt = 'App Icon';
+            img.style.width = '100px';
+            img.style.height = '100px';
+            document.body.appendChild(img);
+        });
+	
+    </script>
+	<link rel="apple-touch-icon" sizes="180x180" href="#icon"> <!-- Replace with your icon -->
+</head>
+<body>
+    <h1>Welcome to My PWA</h1>
+    
+    <!-- Download links for icons -->
+    <h2>Download Icons</h2>
+    <ul>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var sizes = [16, 32, 57, 60, 72, 76, 114, 120, 144, 152, 180, 192, 512];
+            sizes.forEach(size => {
+                var icon = createIcon(size, size, '#3498db'); // Generate icon
+                var li = document.createElement('li');
+                var a = document.createElement('a');
+                a.href = icon;
+                a.download = `icon-${size}x${size}.png`;
+                a.textContent = `Download ${size}x${size} Icon`;
+                li.appendChild(a);
+                document.body.querySelector('ul').appendChild(li);
+            });
+        });
+    </script>
+    </ul>
+
+    <!-- Your app content here -->
+</body>
+</html>
+
