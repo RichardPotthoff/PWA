@@ -1,4 +1,4 @@
-const version = 'v1.0f';
+const version = 'v1.0g';
 const cacheName = 'my-pwa-cache-' + version;
 
 
